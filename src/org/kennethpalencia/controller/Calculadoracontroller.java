@@ -20,7 +20,7 @@ public class CalculadoraController {
             opcion2 = "";
             pantalla.setText("0"); 
             calculoTerminado = true;
-            return; // Detiene la ejecución aquí para que no intente procesar "C" como número
+            return; 
         }
 
         // Si ya se completó un cálculo, reiniciar variables al presionar un nuevo número
@@ -40,9 +40,9 @@ public class CalculadoraController {
             }
             actualizarPantalla(pantalla);        
         } 
-        // Entrada de los operadores
-        else if (entrada.equals("+") || entrada.equals("-") || entrada.equals("x") || entrada.equals("÷")) {
-            if (!opcion1.isEmpty()) { // Evita poner un operador si no hay un primer número
+        // Entrada de operadores
+        else if (entrada.equals("+") || entrada.equals("-") || entrada.equals("x") || entrada.equals("÷") || entrada.equals("^")) {
+            if (!opcion1.isEmpty()) { 
                 operador = entrada; 
                 actualizarPantalla(pantalla);  
             }
@@ -53,7 +53,7 @@ public class CalculadoraController {
                 opcion1 = calcularResultado(opcion1, operador, opcion2);
                 operador = "";
                 opcion2 = "";
-                calculoTerminado = true; // Se pone en true para que el siguiente número limpie la pantalla
+                calculoTerminado = true; 
             }
             actualizarPantalla(pantalla);
         }
@@ -69,7 +69,7 @@ public class CalculadoraController {
         }
     }
 
-    // Método que procesa las 4 operaciones matemáticas de forma segura
+    // Método que procesa las operaciones matemáticas
     private String calcularResultado(String num1, String op, String num2) {
         try {
             double datoUno = Double.parseDouble(num1);
@@ -88,16 +88,19 @@ public class CalculadoraController {
                     break;
                 case "÷":
                     if (datoDos == 0) {
-                        return "Syntax error"; // Evita la división entre cero
+                        return "Error"; 
                     }
                     resultado = datoUno / datoDos;
+                    break;
+                case "^":
+                    resultado = Math.pow(datoUno, datoDos); // Eleva el primer número al exponente del segundo
                     break;
                 default:
                     return "0";
             }
             return formatearResultado(resultado);
         } catch (NumberFormatException e) {
-            return "Syntax error";
+            return "Error";
         }
     }
 
