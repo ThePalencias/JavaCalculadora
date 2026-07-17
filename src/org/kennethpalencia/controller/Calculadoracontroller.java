@@ -23,31 +23,57 @@ public class CalculadoraController {
             return; 
         }
 
-        // Si ya se completó un cálculo, reiniciar variables al presionar un nuevo número
-        if (calculoTerminado && entrada.matches("[0-9]")) {
+        // Si ya se completó un cálculo, reiniciar variables al presionar un nuevo número o punto
+        if (calculoTerminado && (entrada.matches("[0-9]") || entrada.equals("."))) {
             opcion1 = "";
             operador = "";
             opcion2 = "";
         }
         calculoTerminado = false;
 
-        // Entrada de números
-        if (entrada.matches("[0-9]")) {
+        // Entrada de números y punto decimal
+        if (entrada.matches("[0-9]") || entrada.equals(".")) {
             if (operador.isEmpty()) {
+                // Evitar múltiples puntos en el primer número
+                if (entrada.equals(".") && opcion1.contains(".")) {
+                    return; 
+                }
                 opcion1 += entrada; 
             } else {
+                // Evitar múltiples puntos en el segundo número
+                if (entrada.equals(".") && opcion2.contains(".")) {
+                    return; 
+                }
                 opcion2 += entrada; 
             }
             actualizarPantalla(pantalla);        
         } 
-        // Entrada de operadores
+        // Entrada de operadores binarios
         else if (entrada.equals("+") || entrada.equals("-") || entrada.equals("x") || entrada.equals("÷") || entrada.equals("^")) {
             if (!opcion1.isEmpty()) { 
                 operador = entrada; 
                 actualizarPantalla(pantalla);  
             }
         } 
-        // Botón Igual 
+        // Al presionar la Raiz, se ejecuta en el numero directramente
+        else if (entrada.equals("√")) {
+            if (!opcion1.isEmpty() && operador.isEmpty()) {
+                try {
+                    double numero = Double.parseDouble(opcion1);
+                    if (numero >= 0) {
+                        opcion1 = formatearResultado(Math.sqrt(numero));
+                    } else {
+                        opcion1 = "Error"; // Evita raíces cuadradas de números negativos
+                    }
+                    calculoTerminado = true; // Permite que el siguiente número limpie la pantalla
+                    actualizarPantalla(pantalla);
+                } catch (NumberFormatException e) {
+                    opcion1 = "Error";
+                    actualizarPantalla(pantalla);
+                }
+            }
+        }
+        // Botón Igual
         else if (entrada.equals("=")) {
             if (!opcion1.isEmpty() && !operador.isEmpty() && !opcion2.isEmpty()) {
                 opcion1 = calcularResultado(opcion1, operador, opcion2);
@@ -69,7 +95,7 @@ public class CalculadoraController {
         }
     }
 
-    // Método que procesa las operaciones matemáticas
+    // Método que procesa las operaciones matemáticas binarias
     private String calcularResultado(String num1, String op, String num2) {
         try {
             double datoUno = Double.parseDouble(num1);
@@ -93,7 +119,7 @@ public class CalculadoraController {
                     resultado = datoUno / datoDos;
                     break;
                 case "^":
-                    resultado = Math.pow(datoUno, datoDos); // Eleva el primer número al exponente del segundo
+                    resultado = Math.pow(datoUno, datoDos);
                     break;
                 default:
                     return "0";
