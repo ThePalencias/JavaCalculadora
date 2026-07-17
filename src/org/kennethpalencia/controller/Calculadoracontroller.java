@@ -49,13 +49,13 @@ public class CalculadoraController {
             actualizarPantalla(pantalla);        
         } 
         // Entrada de operadores binarios
-        else if (entrada.equals("+") || entrada.equals("-") || entrada.equals("x") || entrada.equals("÷") || entrada.equals("^")) {
+        else if (entrada.equals("+") || entrada.equals("-") || entrada.equals("x") || entrada.equals("÷") || entrada.equals("^") || entrada.equals("%")) {
             if (!opcion1.isEmpty()) { 
                 operador = entrada; 
                 actualizarPantalla(pantalla);  
             }
         } 
-        // Al presionar la Raiz, se ejecuta en el numero directramente
+        // La raiz cuadrada de ejecuta de inmediato en el codigo
         else if (entrada.equals("√")) {
             if (!opcion1.isEmpty() && operador.isEmpty()) {
                 try {
@@ -63,9 +63,9 @@ public class CalculadoraController {
                     if (numero >= 0) {
                         opcion1 = formatearResultado(Math.sqrt(numero));
                     } else {
-                        opcion1 = "Error"; // Evita raíces cuadradas de números negativos
+                        opcion1 = "Error"; // Evita raíces de números negativos
                     }
-                    calculoTerminado = true; // Permite que el siguiente número limpie la pantalla
+                    calculoTerminado = true; 
                     actualizarPantalla(pantalla);
                 } catch (NumberFormatException e) {
                     opcion1 = "Error";
@@ -73,7 +73,7 @@ public class CalculadoraController {
                 }
             }
         }
-        // Botón Igual
+        // Botón Igual 
         else if (entrada.equals("=")) {
             if (!opcion1.isEmpty() && !operador.isEmpty() && !opcion2.isEmpty()) {
                 opcion1 = calcularResultado(opcion1, operador, opcion2);
@@ -95,7 +95,7 @@ public class CalculadoraController {
         }
     }
 
-    // Método que procesa las operaciones matemáticas binarias
+    // Método que procesa las operaciones matemáticas
     private String calcularResultado(String num1, String op, String num2) {
         try {
             double datoUno = Double.parseDouble(num1);
@@ -120,6 +120,9 @@ public class CalculadoraController {
                     break;
                 case "^":
                     resultado = Math.pow(datoUno, datoDos);
+                    break;
+                case "%":
+                    resultado = (datoUno * datoDos) / 100.0; 
                     break;
                 default:
                     return "0";
