@@ -8,16 +8,22 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label; 
 import javafx.scene.layout.GridPane; 
 import javafx.scene.layout.VBox; 
-import javafx.scene.text.Font;       
+import javafx.scene.text.Font; 
 import javafx.scene.text.FontWeight;  
+import org.kennethpalencia.controller.CalculadoraController;
 
 public class CalculadoraView {
     private VBox view; 
     private Label pantalla; 
     private GridPane cuadroBotones;     
     
+    // Controlador adaptado del segundo código
+    private CalculadoraController controlador; 
+    
     // Constructor
     public CalculadoraView() {
+        controlador = new CalculadoraController(); 
+
         view = new VBox(15); 
         view.setPadding(new Insets(15));
         view.setAlignment(Pos.CENTER);
@@ -34,50 +40,32 @@ public class CalculadoraView {
         cuadroBotones.setAlignment(Pos.CENTER);
         
         Button btnCiento = accionBoton("%");
-        
         Button btnC = accionBoton("C");
-        
         Button btnUNo = nuevoBoton("1");
-        
-        
         Button btnDos = nuevoBoton("2");
-        
         Button btnTres = nuevoBoton("3");
-
         Button btnCuatro = nuevoBoton("4");
-        
         Button btnCinco = nuevoBoton("5");
-        
         Button btnSeis = nuevoBoton("6");
-        
         Button btnSiete = nuevoBoton("7");
-        
         Button btnOcho = nuevoBoton("8");
-        
         Button btnNueve = nuevoBoton("9");
-        
         Button btnCero = nuevoBoton("0");
-        
         Button btnPunto = accionBoton(".");
-        
         Button btnIgual = accionBoton("=");
         btnIgual.setPrefSize(110, 50);
-        
         Button btnMas = accionBoton("+");
-        
         Button btnMenos = accionBoton("-");
-
         Button btnPor = accionBoton("x");
-        
         Button btnDiv = accionBoton("÷");
-        
         Button btnElevar = accionBoton("^");
-        
         Button btnRaiz = accionBoton("√");
+        Button btnBorrar = accionBoton("<-");
         
  
         
     cuadroBotones.add(btnC, 0, 1);
+    cuadroBotones.add(btnBorrar, 3, 1);
     cuadroBotones.add(btnCiento, 0, 2);
     cuadroBotones.add(btnElevar, 1, 2);
     cuadroBotones.add(btnRaiz, 2, 2);
@@ -99,7 +87,6 @@ public class CalculadoraView {
     cuadroBotones.add(btnIgual, 2, 6);
     GridPane.setColumnSpan(btnIgual, 2);
 
-        
         
         
         view.getChildren().addAll(pantalla, cuadroBotones);     
@@ -127,6 +114,8 @@ public class CalculadoraView {
         });
         btn.setFont(Font.font("Consolas", FontWeight.BOLD, 20));
         
+        // Vinculación con el controlador añadida
+        btn.setOnAction(e -> controlador.procesoDeEntrada(texto, pantalla));
         
         return btn;
         
@@ -150,6 +139,8 @@ public class CalculadoraView {
         });
         btn.setFont(Font.font("Consolas", FontWeight.BOLD, 20));
         
+        // Vinculación con el controlador añadida
+        btn.setOnAction(e -> controlador.procesoDeEntrada(texto, pantalla));
         
         return btn;
         
