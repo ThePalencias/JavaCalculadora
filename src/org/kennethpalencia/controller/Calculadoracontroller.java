@@ -13,7 +13,7 @@ public class CalculadoraController {
     }
 
     public void procesoDeEntrada(String entrada, Label pantalla) {
-        // Botón limpiar todo
+        // Botón limpiar todo 
         if (entrada.equals("C")) {
             opcion1 = "";
             operador = "";
@@ -21,6 +21,19 @@ public class CalculadoraController {
             pantalla.setText("0"); 
             calculoTerminado = true;
             return; 
+        }
+
+        // Botón borrar un solo dígito 
+        if (entrada.equals("<-")) {
+            if (!opcion2.isEmpty()) {
+                opcion2 = opcion2.substring(0, opcion2.length() - 1);
+            } else if (!operador.isEmpty()) {
+                operador = "";
+            } else if (!opcion1.isEmpty()) {
+                opcion1 = opcion1.substring(0, opcion1.length() - 1);
+            }
+            actualizarPantalla(pantalla);
+            return; // Detiene el flujo para que no procese el "<-" como número u operador
         }
 
         // Si ya se completó un cálculo, reiniciar variables al presionar un nuevo número o punto
@@ -48,14 +61,14 @@ public class CalculadoraController {
             }
             actualizarPantalla(pantalla);        
         } 
-        // Entrada de operadores binarios
+        // Entrada de operadores matematicos
         else if (entrada.equals("+") || entrada.equals("-") || entrada.equals("x") || entrada.equals("÷") || entrada.equals("^") || entrada.equals("%")) {
             if (!opcion1.isEmpty()) { 
                 operador = entrada; 
                 actualizarPantalla(pantalla);  
             }
         } 
-        // La raiz cuadrada de ejecuta de inmediato en el codigo
+        // La raiz se ejecuta de inmediato
         else if (entrada.equals("√")) {
             if (!opcion1.isEmpty() && operador.isEmpty()) {
                 try {
@@ -63,7 +76,7 @@ public class CalculadoraController {
                     if (numero >= 0) {
                         opcion1 = formatearResultado(Math.sqrt(numero));
                     } else {
-                        opcion1 = "Error"; // Evita raíces de números negativos
+                        opcion1 = "Error"; 
                     }
                     calculoTerminado = true; 
                     actualizarPantalla(pantalla);
@@ -114,7 +127,7 @@ public class CalculadoraController {
                     break;
                 case "÷":
                     if (datoDos == 0) {
-                        return "Error"; 
+                        return "Syntax Error"; 
                     }
                     resultado = datoUno / datoDos;
                     break;
@@ -122,14 +135,15 @@ public class CalculadoraController {
                     resultado = Math.pow(datoUno, datoDos);
                     break;
                 case "%":
-                    resultado = (datoUno * datoDos) / 100.0; 
+                    resultado = (datoUno * datoDos) / 100.0; //Para usarlo se pone antes o despues del numero a operar
+                                                            //como por ejemplo 10% 100 o 100 10%
                     break;
                 default:
                     return "0";
             }
             return formatearResultado(resultado);
         } catch (NumberFormatException e) {
-            return "Error";
+            return "Syntax Error";
         }
     }
 
