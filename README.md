@@ -18,4 +18,4 @@ org.kennethpalencia
     Funcionalidad en base a tema visto en clase
 
 ##Enlace de video
-    OBS Grabar microfono
+    https://youtu.be/azMB2toKMsU
